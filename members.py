@@ -7,7 +7,4 @@ if (request == 'u'):
     requests.post(url + '/update_name', json={'newname': input("What is your new name?")})
 
 elif (request== 'd'):
-    print(json.loads(requests.get(url + '/handle_get',headers=headers).json()))
-
-
-
+    print(json.loads(requests.get(url + '/handle_get',headers=headers).text))

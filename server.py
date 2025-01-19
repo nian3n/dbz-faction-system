@@ -17,18 +17,22 @@ print(load_data())
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
-@app.route("/handle_get", methods=["GET"])
-def dashboard():
-    data = request.json
-    full_name = data["full_name"]
+@app.route("/tmp")
+def temp():
+    return jsonify({'he' :'lo'})
 
-    existent_user = False
+@app.route("/handle_get")
+def dashboard():
+    #data = request.json
+    #full_name = data["full_name"]
+
+    #existent_user = False
     factions = load_data()
-    for faction_name, faction_info, in factions["factions"].items():
-        if full_name in faction_info["members"]:
-            existent_user = True
-        if not existent_user:
-            return jsonify({"error": "User not found"}), 404
+    #for faction_name, faction_info, in factions["factions"].items():
+    #    if full_name in faction_info["members"]:
+    #        existent_user = True
+    #    if not existent_user:
+    #        return jsonify({"error": "User not found"}), 404
     return jsonify(factions)
         
 
@@ -51,21 +55,24 @@ def update_fullname():
 def update_points():
     data = request.json
     faction_name = data["faction"]
-    member_name = data["member"]
-    new_points = data["points"]
+    member_name = data["name"]
+    new_points = data["point"]
 
     factions = load_data()
 
-    if member_name not in factions["factions"][faction_name]["members"]:
-        return jsonify({"error": "User not found in the specified faction"}), 404
+    for key in factions:
+        if member_name in factions[key]['members']:
+            factions[key]['members'][member_name] += new_points
+            break
 
-    factions["factions"][faction_name]["members"][member_name] = new_points
+    #factions["factions"][faction_name]["members"][member_name] = new_points
 
-    factions["factions"][faction_name]["faction_points"] = sum(
-        factions["factions"][faction_name]["members"].values()
-    )
+    #factions["factions"][faction_name]["faction_points"] = sum(
+    #    factions["factions"][faction_name]["members"].values()
+    #)
 
     save_data(factions)
+    return "None"
 
     
 
